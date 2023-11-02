@@ -4,7 +4,7 @@
 
 ### Usage
 ```shell
-npm install @terence/githubdb
+npm install @terencesun/githubdb
 ```
 
 ```Typescript

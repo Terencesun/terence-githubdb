@@ -1,0 +1,33 @@
+{
+  "name": "@terencesun/githubdb",
+  "version": "1.0.0",
+  "description": "operate with github like mongodb for nodejs",
+  "main": "./lib/index.js",
+  "types": "./lib/types/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "Terence Sun",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Terencesun/terence-githubdb"
+  },
+  "engines": {
+    "node": ">=18.18.2"
+  },
+  "dependencies": {
+    "@octokit/rest": "^20.0.2",
+    "picodb": "^1.0.5"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.7",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
+    "eslint": "^8.52.0",
+    "eslint-config-alloy": "^5.1.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2"
+  }
+}

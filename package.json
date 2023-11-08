@@ -1,6 +1,6 @@
 {
   "name": "@terencesun/githubdb",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "operate with github like mongodb for nodejs",
   "main": "./lib/index.js",
   "types": "./lib/types/index.d.ts",

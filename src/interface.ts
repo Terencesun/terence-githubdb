@@ -39,6 +39,7 @@ export type DB_CONNECT = () => Promise<void>;
 
 export interface GithubInter {
         connect(): Promise<void>
+        checkCreate(): Promise<boolean>
         getRepoFileCtx(): Promise<GithubRepoPathCtx>
         updateFile(ctx: string, sha: string): Promise<GithubRepoUpdateInfo>
 }

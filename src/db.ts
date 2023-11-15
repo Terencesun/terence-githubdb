@@ -29,6 +29,7 @@ export class GithubDb implements GithubDBInter {
 
         public async connect(): Promise<void> {
                 await this.github.connect();
+                await this.github.checkCreate();
         }
 
         public async loadDatas(): Promise<string> {

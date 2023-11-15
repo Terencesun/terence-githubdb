@@ -66,6 +66,30 @@ export class Github implements GithubInter {
                 return true;
         }
 
+        public checkCreate(): Promise<boolean> {
+                let timmer: NodeJS.Timeout;
+                let lock = false;
+                let count = 0;
+                return new Promise((resolve, reject) => {
+                        timmer = setInterval(async () => {
+                                if (!lock) {
+                                        lock = true;
+                                        count += 1;
+                                        const repoRet = await this.isRepoExist();
+                                        const repoPathRet = await this.isRepoPathExist();
+                                        if (repoRet && repoPathRet) {
+                                                clearInterval(timmer);
+                                                resolve(true);
+                                        }
+                                        lock = false;
+                                }
+                                if (count > 5) {
+                                        reject(false);
+                                }
+                        }, 1000);
+                });
+        }
+
         public async createRepo(): Promise<void> {
                 await this.octokit.rest.repos.createForAuthenticatedUser({
                         name: this.repo,

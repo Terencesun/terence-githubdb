@@ -16,7 +16,11 @@ async function main() {
                 owner: "<your username, like db server name>",
                 repo: "<your repository to store the db's data, like database name>",    // Suggest that repo be private
                 path: "<your file path in the repository to store the db's data, like table name>",
+                branch: "<your repository's branch you can choose, optional, default is your default branch>"
         });
+        
+        // NOTE: the programe will create the branch you set if you branch is not created, and the base sha is the latest default branch commit
+        // if you don't want the behavior, you should create the branch by yourself
         
         // connect to db, if the repo or path is not exist, here will create them
         await githubdb.connect();

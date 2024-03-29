@@ -24,19 +24,19 @@ export class Github implements GithubInter {
 
         public async connect() {
                 // check the repo, if no exist then create
-                // check the path, if no exist then create
                 // check the branch, if no exist then create
+                // check the path, if no exist then create
                 if (!await this.isRepoExist()) {
                         // no exist
                         await this.createRepo();
                 }
-                if (!await this.isRepoPathExist()) {
-                        // no exist
-                        await this.createPath();
-                }
                 if (this.branch && !await this.isBranchExist()) {
                         // no exist
                         await this.createBranch();
+                }
+                if (!await this.isRepoPathExist()) {
+                        // no exist
+                        await this.createPath();
                 }
         }
 

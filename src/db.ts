@@ -18,6 +18,7 @@ export class GithubDb implements GithubDBInter {
                         owner: options.owner,
                         repo: options.repo,
                         path: options.path,
+                        branch: options.branch,
                         log: {
                                 debug: () => {},
                                 info: () => {},

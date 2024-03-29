@@ -27,6 +27,7 @@ export interface GithubDBOptions {
         owner: string
         repo: string
         path: string
+        branch?: string
 }
 
 export type DB_INSERTONE = (doc: object) => Promise<object>;

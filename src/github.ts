@@ -12,17 +12,20 @@ export class Github implements GithubInter {
         private owner: string;
         private repo: string;
         private path: string;
+        private branch: string | null;
 
         public constructor(options: GithubOptions) {
                 this.octokit = new Octokit(options);
                 this.owner = options.owner;
                 this.repo = options.repo;
                 this.path = options.path;
+                this.branch = options.branch ? options.branch : null;
         }
 
         public async connect() {
                 // check the repo, if no exist then create
                 // check the path, if no exist then create
+                // check the branch, if no exist then create
                 if (!await this.isRepoExist()) {
                         // no exist
                         await this.createRepo();
@@ -30,6 +33,10 @@ export class Github implements GithubInter {
                 if (!await this.isRepoPathExist()) {
                         // no exist
                         await this.createPath();
+                }
+                if (this.branch && !await this.isBranchExist()) {
+                        // no exist
+                        await this.createBranch();
                 }
         }
 
@@ -51,10 +58,13 @@ export class Github implements GithubInter {
 
         public async isRepoPathExist(): Promise<boolean> {
                 try {
+                        const refObj: any = {};
+                        if (this.branch) refObj["ref"] = `refs/heads/${this.branch}`;
                         await this.octokit.rest.repos.getContent({
                                 owner: this.owner,
                                 repo: this.repo,
                                 path: this.path,
+                                ...refObj,
                         });
                 } catch (e) {
                         if ((e as any).status === 404) {
@@ -64,6 +74,15 @@ export class Github implements GithubInter {
                         }
                 }
                 return true;
+        }
+
+        public async isBranchExist(): Promise<boolean> {
+                const { data: branches } = await this.octokit.repos.listBranches({
+                        owner: this.owner,
+                        repo: this.repo,
+                });
+                const findRet = branches.find(x => x.name === this.branch);
+                return findRet ? true : false;
         }
 
         public checkCreate(): Promise<boolean> {
@@ -77,7 +96,8 @@ export class Github implements GithubInter {
                                         count += 1;
                                         const repoRet = await this.isRepoExist();
                                         const repoPathRet = await this.isRepoPathExist();
-                                        if (repoRet && repoPathRet) {
+                                        const branchRet = await this.isBranchExist();
+                                        if (repoRet && repoPathRet && branchRet) {
                                                 clearInterval(timmer);
                                                 resolve(true);
                                         }
@@ -99,20 +119,50 @@ export class Github implements GithubInter {
         }
 
         public async createPath(): Promise<void> {
+                const branchInfo: any = {};
+                if (this.branch) branchInfo["branch"] = this.branch;
                 await this.octokit.rest.repos.createOrUpdateFileContents({
                         owner: this.owner,
                         repo: this.repo,
                         path: this.path,
+                        ...branchInfo,
                         message: "create path file",
                         content: "",
                 });
         }
 
+        public async createBranch(): Promise<void> {
+                // get the default branch
+                const { data: branchData } = await this.octokit.repos.get({
+                        owner: this.owner,
+                        repo: this.repo,
+                });
+                const defaultBranch = branchData.default_branch;
+                // get the default ref's  latest sha
+                const { data: branchInfo } = await this.octokit.repos.getBranch({
+                        owner: this.owner,
+                        repo: this.repo,
+                        branch: defaultBranch
+                });
+                const sha = branchInfo.commit.sha;
+                const ref = "refs/heads/" + this.branch as string;
+                // create a new branch
+                await this.octokit.git.createRef({
+                        owner: this.owner,
+                        repo: this.repo,
+                        ref: ref,
+                        sha: sha,
+                });
+        }
+
         public async getRepoFileCtx(): Promise<GithubRepoPathCtx> {
+                const refObj: any = {};
+                if (this.branch) refObj["ref"] = `refs/heads/${this.branch}`;
                 const ctxRaw = await this.octokit.rest.repos.getContent({
                         owner: this.owner,
                         repo: this.repo,
                         path: this.path,
+                        ...refObj,
                 });
                 const data = ctxRaw.data as { content: string, sha: string };
                 const ctx = Buffer.from(data.content, "base64").toString("utf-8");
@@ -123,10 +173,13 @@ export class Github implements GithubInter {
         }
 
         public async updateFile(ctx: string, sha: string): Promise<GithubRepoUpdateInfo> {
+                const branchInfo: any = {};
+                if (this.branch) branchInfo["branch"] = this.branch;
                 const updateInfo = await this.octokit.repos.createOrUpdateFileContents({
                         owner: this.owner,
                         repo: this.repo,
                         path: this.path,
+                        ...branchInfo,
                         message: `${this.path} file update at ${new Date().toUTCString()}`,
                         content: new Buffer(ctx).toString("base64"),
                         sha,

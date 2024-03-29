@@ -11,8 +11,9 @@ describe.skip("test_github", () => {
                 const github = new Github({
                         owner: owner,
                         repo: repo,
-                        path: path,
+                        path: "test_file_for_test_15",
                         auth: token,
+                        branch: "test_15",
                         userAgent: "github",
                         log: {
                                 debug: () => {},
@@ -21,15 +22,17 @@ describe.skip("test_github", () => {
                                 error: console.error
                         },
                 });
-                await github.getRepoFileCtx();
+                const data = await github.getRepoFileCtx();
+                console.log(data);
         });
 
         it("test_updateFile", async () => {
                 const github = new Github({
                         owner: owner,
                         repo: repo,
-                        path: path,
+                        path: "test_file_for_test_15",
                         auth: token,
+                        branch: "test_15",
                         userAgent: "github",
                         log: {
                                 debug: () => {},
@@ -67,8 +70,9 @@ describe.skip("test_github", () => {
                 const github = new Github({
                         owner: owner,
                         repo: repo,
-                        path: path,
+                        path: "test_file_for_test_15",
                         auth: token,
+                        branch: "test_11",
                         userAgent: "github",
                         log: {
                                 debug: () => {},
@@ -101,9 +105,10 @@ describe.skip("test_github", () => {
         it("test_createPath", async () => {
                 const github = new Github({
                         owner: owner,
-                        repo: "test_10",
-                        path: "test_file",
+                        repo: "test_db",
+                        path: "test_file_for_test_15",
                         auth: token,
+                        branch: "test_15",
                         userAgent: "github",
                         log: {
                                 debug: () => {},
@@ -132,5 +137,41 @@ describe.skip("test_github", () => {
                 await github.connect();
         });
 
+        it("test_isBranchExist", async () => {
+                const github = new Github({
+                        owner: owner,
+                        repo: "test_db",
+                        path: "test_file",
+                        auth: token,
+                        branch: "test_1",
+                        userAgent: "github",
+                        log: {
+                                debug: () => {},
+                                info: console.log,
+                                warn: console.warn,
+                                error: console.error
+                        },
+                });
+                await github.connect();
+                console.log(await github.isBranchExist());
+        });
+
+        it("test_createBranch", async () => {
+                const github = new Github({
+                        owner: owner,
+                        repo: "test_db",
+                        path: "test_file",
+                        auth: token,
+                        branch: "test_15",
+                        userAgent: "github",
+                        log: {
+                                debug: () => {},
+                                info: console.log,
+                                warn: console.warn,
+                                error: console.error
+                        },
+                });
+                await github.createBranch();
+        });
 
 });

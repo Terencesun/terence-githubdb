@@ -4,6 +4,7 @@ export interface GithubOptions extends OctokitOptions {
         owner: string
         repo: string
         path: string
+        branch?: string
 }
 
 export interface GithubRepoPathCtx {

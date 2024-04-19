@@ -1,3 +1,4 @@
 export const parseJson = (str: string): Array<any> => {
-        return JSON.parse(str);
+        if (str) return JSON.parse(str);
+        return [];
 };

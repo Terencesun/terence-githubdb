@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "declaration": true,
+    "esModuleInterop": true,
     "removeComments": true,
     "module": "commonjs",
     "declaration": true,

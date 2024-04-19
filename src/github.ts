@@ -1,4 +1,6 @@
 import { Octokit } from "@octokit/rest";
+import { fileDownload } from "./utils";
+import fs from "node:fs";
 import type {
         GithubOptions,
         GithubRepoPathCtx,
@@ -164,10 +166,13 @@ export class Github implements GithubInter {
                         path: this.path,
                         ...refObj,
                 });
-                const data = ctxRaw.data as { content: string, sha: string };
-                const ctx = Buffer.from(data.content, "base64").toString("utf-8");
+                const data = ctxRaw.data as { download_url: string, sha: string };
+                const info = await fileDownload(data.download_url, __dirname);
+                const filePath = info.filePath;
+                const content = fs.readFileSync(filePath, "utf-8");
+                fs.unlinkSync(filePath);
                 return {
-                        content: ctx,
+                        content: content,
                         sha: data.sha,
                 };
         }
@@ -181,7 +186,7 @@ export class Github implements GithubInter {
                         path: this.path,
                         ...branchInfo,
                         message: `${this.path} file update at ${new Date().toUTCString()}`,
-                        content: new Buffer(ctx).toString("base64"),
+                        content: Buffer.from(ctx).toString("base64"),
                         sha,
                 });
                 return {

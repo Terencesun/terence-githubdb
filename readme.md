@@ -59,5 +59,9 @@ main();
 ### Performance
 We all use GitHub as a database, so, Low performance, but can be used to record some small things
 
+### CHANGES
+- 1.1.2
+    - github.ts: add pre_page: 9999 into method isBranchExist, to avoid the github api branch number limit
+
 ### Licence
 MIT

@@ -82,6 +82,7 @@ export class Github implements GithubInter {
                 const { data: branches } = await this.octokit.repos.listBranches({
                         owner: this.owner,
                         repo: this.repo,
+                        per_page: 9999,
                 });
                 const findRet = branches.find(x => x.name === this.branch);
                 return findRet ? true : false;

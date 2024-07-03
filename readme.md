@@ -62,6 +62,8 @@ We all use GitHub as a database, so, Low performance, but can be used to record 
 ### CHANGES
 - 1.1.2
     - github.ts: add pre_page: 9999 into method isBranchExist, to avoid the github api branch number limit
+- 1.1.3
+    - github.ts: add getAllBranchs function to get all branches (the max pre_page is 100 via the api's documents), to avoid the github api branch number limit
 
 ### Licence
 MIT

@@ -1,5 +1,5 @@
 import { Octokit } from "@octokit/rest";
-import { fileDownload } from "./utils";
+import { fileDownload, getAllBranchs } from "./utils";
 import fs from "node:fs";
 import type {
         GithubOptions,
@@ -79,11 +79,11 @@ export class Github implements GithubInter {
         }
 
         public async isBranchExist(): Promise<boolean> {
-                const { data: branches } = await this.octokit.repos.listBranches({
+                const branches: Array<{ name: string }> = [];
+                await getAllBranchs(this.octokit, {
                         owner: this.owner,
                         repo: this.repo,
-                        per_page: 9999,
-                });
+                }, branches, 0);
                 const findRet = branches.find(x => x.name === this.branch);
                 return findRet ? true : false;
         }

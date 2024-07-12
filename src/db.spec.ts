@@ -6,6 +6,17 @@ describe.skip("test_githubdb", () => {
         const repo: string = "test_db";
         const path: string = "terence_db_test.json";
 
+        it("test_usageInfo", async () => {
+                const github = new GithubDb({
+                        token: token,
+                        owner: owner,
+                        repo: repo,
+                        path: path,
+                });
+                const usage = await github.usageInfo();
+                console.log(usage);
+        });
+
         it("test_insertOne", async () => {
                 const github = new GithubDb({
                         token: token,

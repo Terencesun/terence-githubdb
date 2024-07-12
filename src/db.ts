@@ -2,6 +2,7 @@ import { Github } from "./github";
 import type {
         GithubDBInter,
         GithubDBOptions,
+        GithubUsageInfo,
 } from "./interface";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const PicoDB = require("picodb");
@@ -26,6 +27,10 @@ export class GithubDb implements GithubDBInter {
                                 error: console.error
                         },
                 });
+        }
+
+        public async usageInfo(): Promise<GithubUsageInfo> {
+                return await this.github.usageInfo();
         }
 
         public async connect(): Promise<void> {

@@ -6,6 +6,7 @@ import type {
         GithubRepoPathCtx,
         GithubRepoUpdateInfo,
         GithubInter,
+        GithubUsageInfo,
 } from "./interface";
 
 export class Github implements GithubInter {
@@ -40,6 +41,11 @@ export class Github implements GithubInter {
                         // no exist
                         await this.createPath();
                 }
+        }
+
+        public async usageInfo(): Promise<GithubUsageInfo> {
+                const { data: { rate } } = await this.octokit.rest.rateLimit.get();
+                return rate;
         }
 
         public async isRepoExist(): Promise<boolean> {

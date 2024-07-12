@@ -1,7 +1,14 @@
 {
   "name": "@terencesun/githubdb",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "operate with github like mongodb for nodejs",
+  "keywords": [
+    "githubdb",
+    "mongo github db",
+    "crud",
+    "database",
+    "json"
+  ],
   "main": "./lib/index.js",
   "types": "./lib/types/index.d.ts",
   "scripts": {

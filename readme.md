@@ -21,6 +21,13 @@ async function main() {
         
         // NOTE: the programe will create the branch you set if you branch is not created, and the base sha is the latest default branch commit
         // if you don't want the behavior, you should create the branch by yourself
+  
+        // you can use usageInfo() to get the current usage information of the API
+        // more detail infomation about rate limit, visit: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28
+        // we only focus on the primary rate limit, but not the secondary rate limit
+        // and you should control the rate when you use this package
+        const usage = await githubdb.usageInfo();
+        console.log(usage);
         
         // connect to db, if the repo or path is not exist, here will create them
         await githubdb.connect();
@@ -64,6 +71,9 @@ We all use GitHub as a database, so, Low performance, but can be used to record 
     - github.ts: add pre_page: 9999 into method isBranchExist, to avoid the github api branch number limit
 - 1.1.3
     - github.ts: add getAllBranchs function to get all branches (the max pre_page is 100 via the api's documents), to avoid the github api branch number limit
+- 1.1.4
+    - add usageInfo() method to get the current usage information of the API
+
 
 ### Licence
 MIT

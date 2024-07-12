@@ -174,4 +174,21 @@ describe.skip("test_github", () => {
                 await github.createBranch();
         });
 
+        it("test_usageInfo", async () => {
+                const github = new Github({
+                        owner: owner,
+                        repo: "test_10",
+                        path: "test_file",
+                        auth: token,
+                        userAgent: "github",
+                        log: {
+                                debug: () => {},
+                                info: console.log,
+                                warn: console.warn,
+                                error: console.error
+                        },
+                });
+                const usage = await github.usageInfo();
+                console.log(usage);
+        });
 });
